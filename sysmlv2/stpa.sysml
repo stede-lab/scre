@@ -11,7 +11,6 @@ library package STPA {
       * loss of reputation, loss or leak of sensitive information,
       * or any other loss that is unacceptable to the stakeholders.
       */
-    attribute title: String;
     attribute priority: Integer;
     ref isCausedBy : Hazard[1..*];
   }
@@ -22,17 +21,16 @@ library package STPA {
       * together with a particular set of worst-case environmental
       * conditions (Environment State), will lead to a loss.
       */
-    attribute title: String;
     ref whenEnvironmentStateIs : SysML::StateUsage[1..*];
     ref isCausedBy : HazardousAction[1..*];
     ref leadsTo : Loss[1..*];
   }
 
   abstract item def ControlAction;
-  abstract item def FeedBack;
+  abstract item def Feedback;
 
   enum def VariationType {
-    doc /* Control Action 'Variation Type' */
+    doc /* Control Action: 'Variation Type' */
     enum NotProviding;
     enum Providing;
     enum OutOfSequence;
@@ -50,7 +48,6 @@ library package STPA {
           3. Providing a potentially safe control action but too early, 
              too late, or in the wrong order.
       */
-    attribute title : String;
     attribute type : VariationType;
     ref whenControllerStateIs: SysML::StateUsage[1..*];
     ref variationOf : ControlAction;
@@ -59,7 +56,7 @@ library package STPA {
   }
 
   enum def AdversityFlawType {
-    doc /* Control Structure 'Adversity Flaw Type' */
+    doc /* Control Structure: 'Adversity Flaw Type' */
     enum Controller;
     enum ControlPath;
     enum ControlledProcess;
@@ -79,7 +76,6 @@ library package STPA {
       * 'Adversity Flaw Type' / 'Attack Pattern') that can lead to 
       *  the hazardous control actions and to hazards.
       */
-    attribute title : String;
     attribute type: AdversityFlawType;
     attribute attack : AttackType;
     ref leadsTo : HazardousAction[1..*];
