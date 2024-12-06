@@ -3,8 +3,18 @@ library package 'SCRE Perspectives' {
   private import Views::*;
   private import STPA::*;
   private import KerML::Element::*;
+  private import ScalarValues::*;
+  private import Metadata::*;
+
+  metadata def <'SMD'> 'SCRE MetaData' {
+    doc /* SCRE Tooling */
+    attribute displayName : String;
+  }
 
   package <'SS'> 'SCRE Stakeholders' {
+    doc /* A stakeholder is a person, organization or
+         * other entity with concerns to be addressed.
+         */
     part def 'Systems Engineer';
     part def 'System Operator';
     part def 'Security Analyst';
@@ -12,6 +22,9 @@ library package 'SCRE Perspectives' {
   }
 
   package <'SC'> 'SCRE Concerns' {
+    doc /* A concern is a specific topic that one or more
+         * stakeholders desire to be addressed.
+         */
     concern 'System Control Structure' {
       stakeholder se : SS::'Systems Engineer';
     }
@@ -35,6 +48,12 @@ library package 'SCRE Perspectives' {
     }
   }
   package <'SVP'> 'SCRE Viewpoints' {
+    doc /* A viewpoint is a requirement to present information from a model 
+         * in a view that addresses certain stakeholder concerns.
+         * 
+         * A viewpoint frames the concerns that will be
+         * addressed by a view that satisfies the viewpoint.
+         */
     viewpoint 'System Description' {
       frame SC::'System Control Structure';
       }
@@ -52,8 +71,14 @@ library package 'SCRE Perspectives' {
     }
   }
   package <'SV'> 'SCRE Views' {
-    view def 'Hazard Analysis View' {
-      view def 'Loss View' {
+    doc /* A view definition specifies how information can be extracted
+         * from a model in order to satisfy one or more viewpoints.
+         * 
+         * A view definition can filter the elements to be included in the
+         * views it specifies.
+         */
+    view def <'HAV'> 'Hazard Analysis View' {
+      view def <'LV'> 'Loss View' {
         filter @STPA::Loss;
       }
       view def 'Hazard View' {
@@ -64,11 +89,23 @@ library package 'SCRE Perspectives' {
       }
       satisfy SVP::'Hazard Analysis';
     }
+    view 'SCRE Id' {
+      @SMD {displayName = "ID";}
+      filter @KerML::Element::shortName;
+    }
+    view 'SCRE Name' {
+      @SMD {displayName = "Name";}
+      filter @KerML::Element::declaredName;
+    }
   }
   package <'SR'> 'SCRE Renderings' {
+    doc /* The Views library package includes four basic kinds of rendering: 
+         * asTreeDiagram, asInterconnectionDiagram, asTextualNotation 
+         * and asElementTable.
+         * Specialized kinds of renderings can be defined*/
     rendering asLossTable :> asElementTable {
       view :>> columnView = (
-          (KerML::Element::shortName, ":", KerML::Element::declaredName),
+          (SV::'SCRE Id', ":", SV::'SCRE Name'),
           KerML::Element::documentation,
           STPA::Loss::priority,
           STPA::Loss::isCausedBy) {
@@ -77,8 +114,7 @@ library package 'SCRE Perspectives' {
     }
     rendering asHazardTable :> asElementTable {
       view :>> columnView = (
-          KerML::Element::shortName,
-          KerML::Element::declaredName,
+          (SV::'SCRE Id', ":", SV::'SCRE Name'),
           KerML::Element::documentation,
           STPA::Hazard::leadsTo,
           STPA::Hazard::isCausedBy) {
