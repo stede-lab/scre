@@ -26,8 +26,15 @@ library package STPA {
     ref leadsTo : Loss[1..*];
   }
 
-  abstract item def ControlAction;
-  abstract item def Feedback;
+  abstract item def ControlAction {
+    doc /* A controller provides Control Actions to control some process 
+        *  and to enforce constraints on the behavior of the controlled 
+        *  process.
+        */
+  }
+  abstract item def Feedback {
+    doc /* Feedback is used to observe the controlled process. */
+  }
 
   enum def VariationType {
     doc /* Control Action: 'Variation Type' */
