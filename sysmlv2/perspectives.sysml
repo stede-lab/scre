@@ -56,7 +56,7 @@ library package 'SCRE Perspectives' {
          */
     viewpoint 'System Description' {
       frame SC::'System Control Structure';
-      }
+    }
     viewpoint 'Hazard Analysis' {
       frame SC::'Hazardous Actions';
     }

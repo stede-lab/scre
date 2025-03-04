@@ -3,34 +3,58 @@ library package STPA {
 
   private import ScalarValues::*;
 
-  item def Loss {
+  occurrence def Loss {
     doc  
-      /* A Loss involves something of value to stakeholders.
+     /* SysMLv2: Occurrence is the most general class of things 
+      * that exist or happen in time and space.
+      * 
+      * STPA: A Loss involves something of value to stakeholders.
       * Losses may include a loss of human life or human injury,
       * property damage, environmental pollution, loss of mission,
       * loss of reputation, loss or leak of sensitive information,
       * or any other loss that is unacceptable to the stakeholders.
       */
-    attribute priority: Integer;
+    attribute priority: Integer default 0 {
+      doc 
+        /* Stakeholder view of importance (1 is most important). Because every 
+         * STPA result is traceable to one or more losses, the analysis 
+         * results can be easily ranked and prioritized based on the losses to 
+         * which they refer. 
+         */
+    }
     ref isCausedBy : Hazard[1..*];
   }
-
-  item def Hazard {
+  abstract state def EnvironmentalState {
+    doc /* An environmental state that will cause a Hazard state 
+         * to lead to a Loss. 
+         */
+  }
+  state def Hazard {
     doc  
-      /* A hazard is a system state or set of conditions that,
+     /* SysMLv2: State is a specific condition or situation in which 
+      * a system or part of a system exists.
+      *
+      * STPA: A hazard is a system state or set of conditions that,
       * together with a particular set of worst-case environmental
-      * conditions (Environment State), will lead to a loss.
+      * conditions (Environmental State), will lead to a loss.
       */
-    ref whenEnvironmentStateIs : SysML::StateUsage[1..*];
+    ref whenEnvironmentStateIs : EnvironmentalState[1..*];
     ref isCausedBy : HazardousAction[1..*];
     ref leadsTo : Loss[1..*];
   }
 
   abstract item def ControlAction {
-    doc /* A controller provides Control Actions to control some process 
-        *  and to enforce constraints on the behavior of the controlled 
-        *  process.
-        */
+    doc 
+      /* SysMLv2: Item is a general class of identifiable objects that may 
+       * be acted on over time, but which do not necessarily perform 
+       * actions themselves. Items can be used to represent inputs 
+       * and outputs to actions such as water, fuel, electrical signals 
+       * and data.
+       *
+       * STPA: A controller provides Control Actions to control some process 
+       * and to enforce constraints on the behavior of the controlled 
+       * process.
+       */
   }
   abstract item def Feedback {
     doc /* Feedback is used to observe the controlled process. */
@@ -43,7 +67,7 @@ library package STPA {
     enum OutOfSequence;
   }
 
-  item def HazardousAction {
+  item def HazardousAction :> ControlAction {
     doc
       /* A Hazardous Action is a control action that, in a particular 
        * context (Controller State) and worst-case environment, will 
@@ -77,11 +101,14 @@ library package STPA {
     enum 'Supply Chain: CAPEC-439: Manipulation During Distribution';
   }
 
-  item def LossScenario {
+  action def LossScenario {
     doc
-      /* A loss scenario describes the causal factors (including 
+     /* SysMLv2: Action represents a unit of behavior or activity that 
+      * can be performed by a system or its parts.
+      *
+      * STPA: A loss scenario describes the causal factors (including 
       * 'Adversity Flaw Type' / 'Attack Pattern') that can lead to 
-      *  the hazardous control actions and to hazards.
+      * hazardous control actions and to hazards.
       */
     attribute type: AdversityFlawType;
     attribute attack : AttackType;
