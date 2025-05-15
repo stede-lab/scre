@@ -1,0 +1,1 @@
+NOTE: The source for pattern images is found here: [ma-pattern.drawio](ma-pattern.drawio) and can be edited using: [https://app.diagrams.net/](https://app.diagrams.net/)

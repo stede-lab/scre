@@ -58,16 +58,34 @@ library package FOREST {
       ref reconfiguresUsing : ResilientMode[1..*];
     }
 
+    item def Parameter {
+      doc /* A FOREST-based measurement tracked over the system lifecyle. */
+      attribute required : ScalarValue; /* system requirements target */
+      attribute design : ScalarValue;   /* system design tarter       */
+      attribute observed : ScalarValue; /* system test observed       */
+    }
+
     abstract action def Monitor {
-      doc /* */
+      doc /* A pattern for monitoring system behavior, using probes, in 
+           * order to detect abnormal system behavior.
+           */
+      ref using : Probe[1..*];
+      ref senseTime : Parameter;
     }
 
     abstract part def Probe {
-      doc /* */
-
+      doc /* An architectural component that collects and reports 
+           * operational data from the system / mission of interest.
+           */
+      ref reportTo : Monitor[1..*];
     }
+
     abstract occurrence def ResilientMode {
-      doc /* */
+      doc /* A pattern for an alternative mode of system operation which limits 
+           * the system / mission impact of a particular set of Loss Scenarios.
+           */
+      abstract action def Activate;
+      ref activateTime : Parameter;
     }
   }
 }

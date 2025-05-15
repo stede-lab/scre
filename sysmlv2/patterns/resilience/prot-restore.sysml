@@ -1,7 +1,6 @@
-library package <'DRP'> DiverseRedundantPart {
+library package ProtectedRestore {
   doc /* */
   
   private import FOREST::Recovery::ResilientMode;
-
 
 }
