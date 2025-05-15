@@ -2,4 +2,4 @@
 
 ![SCRE Context](images/mission-aware-ma-scre-csa-context.png)
 
-SCRE defines [Model Patterns](sysmlv2/patterns/README.md) for  Engineering Resilience.
+SCRE defines [Model Patterns](sysmlv2/patterns) for  Engineering Resilience.
