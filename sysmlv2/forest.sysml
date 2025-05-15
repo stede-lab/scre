@@ -9,7 +9,7 @@ library package FOREST {
   package Prevention {
     doc /* Defensive security focuses on 'preventing' attacks. */
     
-    abstract occurrence def AssuranceCase {
+    abstract item def AssuranceCase {
       doc /* A reasoned, auditable artifact created that supports
            * the contention that its top-level claim (or set of claims), 
            * is satisfied, including systematic argumentation and its 
@@ -35,27 +35,34 @@ library package FOREST {
   }
 
   package Recovery {
-    doc /* Resilience focuses on 'recovering' from successful attacks. */
-
-      abstract part def Sentinel {
-        doc /* An architecural component that is responsible for 
-             * evaluating a set of resilience cases.
-             */
-        ref evaluates : ResilienceCase[1..*];
-      }
-      
-      abstract item def ResilienceCase {
-      doc /* A description of the mechanisms for 
-           * detecting abnormal system behavior, which is indicative 
-           * of a Loss Scenario, and which is to be protected against 
+    doc /* Resilience focuses on 'recovering' from abnormal system
+         * behavior, which may be indicative of an attack. 
+         */
+    
+    abstract part def Sentinel {
+      doc /* An architecural component that is responsible for 
+           * evaluating a set of resilience cases.
+           */
+      ref evaluates : ResilienceCase[1..*];
+    }
+    
+    abstract item def ResilienceCase {
+      doc /* A set of mechanisms for monitoring abnormal 
+           * system behavior, which is indicative of a
+           * Loss Scenario, and which is to be protected against 
            * via system reconfiguration using appropriate resilient 
            * modes of operation.
            */
-        ref reducesConsequenceOf : LossScenario[1..*];
-        ref monitorsUsing : SentinelProbe[1..*];
-        ref reconfiguresUsing : ResilientMode[1..*];
+      ref reducesConsequenceOf : LossScenario[1..*];
+      ref detectsLossUsing : Monitor[1..*];
+      ref reconfiguresUsing : ResilientMode[1..*];
     }
-    abstract action def SentinelProbe {
+
+    abstract action def Monitor {
+      doc /* */
+    }
+
+    abstract part def Probe {
       doc /* */
 
     }
