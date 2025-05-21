@@ -4,12 +4,13 @@ library package FOREST {
        */
   
   private import ScalarValues::*;
+  private import CollectionFunctions::*;
   private import STPA::LossScenario;
 
   package Prevention {
     doc /* Defensive security focuses on 'preventing' attacks. */
     
-    abstract item def AssuranceCase {
+    occurrence def AssuranceCase {
       doc /* A reasoned, auditable artifact created that supports
            * the contention that its top-level claim (or set of claims), 
            * is satisfied, including systematic argumentation and its 
@@ -19,17 +20,17 @@ library package FOREST {
       ref definedBy : Claim[1..*];
       ref reducesLikelihoodOf : LossScenario[1..*];
     }
-    abstract item def Claim {
+    occurrence def Claim {
       doc /* A statement (pattern) that needs to be supported by evidence 
            * and reasoning. 
            */
       ref isSupportedBy : Reasoning[1..*];
     }
-    abstract item def Reasoning {
+    occurrence def Reasoning {
       doc /* An explanation of how the evidence supports the claim. */
       ref using : Evidence[1..*];
     }
-    abstract item def Evidence {
+    occurrence def Evidence {
       doc /* Data or information that supports the claim. */
     }
   }
@@ -39,29 +40,49 @@ library package FOREST {
          * behavior, which may be indicative of an attack. 
          */
     
-    abstract part def Sentinel {
+    part def Sentinel {
       doc /* An architecural component that is responsible for 
            * evaluating a set of resilience cases.
            */
       ref evaluates : ResilienceCase[1..*];
+
+      action def evaluate {
+        for i in 1..evaluates->size() {
+          
+        }
+      
+      }
+
+      requirement def <'SEN.1'> SentinelResilienceCases {
+        doc /* The Sentinal shall continuously evaluate all 
+             * assigned, enabled, resilience cases. */
+
+        subject sentinel : Sentinel;
+
+      }
     }
+
     
-    abstract item def ResilienceCase {
+    abstract occurrence def ResilienceCase {
       doc /* A set of mechanisms for monitoring abnormal 
            * system behavior, which is indicative of a
            * Loss Scenario, and which is to be protected against 
            * via system reconfiguration using appropriate resilient 
            * modes of operation.
            */
+      attribute enabled : Boolean = false;
       ref reducesConsequenceOf : LossScenario[1..*];
       ref detectsLossUsing : Monitor[1..*];
       ref reconfiguresUsing : ResilientMode[1..*];
+      action def execute {
+
+      }
     }
 
     item def Parameter {
       doc /* A FOREST-based measurement tracked over the system lifecyle. */
       attribute required : ScalarValue; /* system requirements target */
-      attribute design : ScalarValue;   /* system design tarter       */
+      attribute design : ScalarValue;   /* system design achieved     */
       attribute observed : ScalarValue; /* system test observed       */
     }
 
@@ -69,8 +90,11 @@ library package FOREST {
       doc /* A pattern for monitoring system behavior, using probes, in 
            * order to detect abnormal system behavior.
            */
-      ref using : Probe[1..*];
+      ref usingInputFrom : Probe[1..*];
       ref senseTime : Parameter;
+      abstract action def sense {
+
+      }
     }
 
     abstract part def Probe {
@@ -84,7 +108,9 @@ library package FOREST {
       doc /* A pattern for an alternative mode of system operation which limits 
            * the system / mission impact of a particular set of Loss Scenarios.
            */
-      abstract action def Activate;
+      abstract action def activate {
+
+      }
       ref activateTime : Parameter;
     }
   }
