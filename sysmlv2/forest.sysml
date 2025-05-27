@@ -48,7 +48,7 @@ library package FOREST {
 
       action def evaluate {
         for i in 1..evaluates->size() {
-          
+          /* fork */
         }
       
       }
@@ -74,7 +74,7 @@ library package FOREST {
       ref reducesConsequenceOf : LossScenario[1..*];
       ref detectsLossUsing : Monitor[1..*];
       ref reconfiguresUsing : ResilientMode[1..*];
-      action def execute {
+      abstract action def execute {
 
       }
     }
